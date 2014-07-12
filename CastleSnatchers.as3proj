@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="bin\FigurativelyHitler.swf" />
+    <movie path="bin\CastleSnatchers.swf" />
     <movie fps="60" />
     <movie width="1024" />
     <movie height="576" />
