@@ -1,5 +1,6 @@
 package
 {
+	import flash.events.Event;
 	import net.flashpunk.graphics.Image;
 	import net.flashpunk.utils.Input;
 	import net.flashpunk.utils.Key;
@@ -17,7 +18,7 @@ package
 		private var castle:Castle;
 		private var renegades:Array;
 		private var healthUI:Text;
-		private var spawner:RefugeeFactory;
+		private var spawner:RefugeeSpawner;
 		private var harpoon:Harpoon;
 		
 		public function Game()
@@ -31,8 +32,11 @@ package
 			var ren1:Escaper = new Escaper();
 			ren1.x = castle.right - ren1.width;
 			ren1.y = castle.bottom - ren1.height;
+			ren1.addEventListener(Escaper.EXIT_SCREEN_EVENT, onPeasantExit);
+			add(ren1);
+			renegades.push(ren1);
 			
-			spawner = new RefugeeFactory(castle.right - ren1.width, castle.bottom - ren1.height);
+			spawner = new RefugeeSpawner(castle.right - ren1.width, castle.bottom - ren1.height);
 			spawner.addRenegade = addRenegade;
 			add(spawner);
 			
@@ -45,7 +49,7 @@ package
 			addGraphic(healthUI);
 			
 			harpoon = new Harpoon();
-			harpoon.x = castle.right - harpoon.width - 22; // account for flag's width
+			harpoon.x = castle.right - harpoon.width - 21; // account for flag's width
 			harpoon.y = castle.bottom - harpoon.height;
 			harpoon.layer = 1;
 			add(harpoon);
@@ -69,8 +73,16 @@ package
 		
 		public function addRenegade(x:Number, y:Number):Escaper
 		{
-			renegades.push(add(new Escaper(x, y)));
+			var newGuy:Escaper = new Escaper(x, y);
+			add(newGuy);
+			renegades.push(newGuy);
+			newGuy.addEventListener(Escaper.EXIT_SCREEN_EVENT, onPeasantExit);
 			return renegades[0];
+		}
+		
+		private function onPeasantExit(e:Event):void 
+		{
+			changeHealth(5);
 		}
 	}
 

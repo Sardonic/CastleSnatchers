@@ -97,7 +97,7 @@ package
 				this.collideTypesInto(["Renegade"], x, y, skeweredRenegades)
 				for each (var r:Escaper in skeweredRenegades)
 				{
-					r.running = false;
+					r.skewer();
 					r.layer = 1;
 				}
 				this.world.getInstance("castle").open();
