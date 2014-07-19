@@ -1,6 +1,7 @@
 package
 {
 	import flash.events.Event;
+	import net.flashpunk.Entity;
 	import net.flashpunk.graphics.Image;
 	import net.flashpunk.utils.Input;
 	import net.flashpunk.utils.Key;
@@ -17,51 +18,27 @@ package
 		private var health:int;
 		private var castle:Castle;
 		private var renegades:Array;
-		private var healthUI:Text;
+		private var healthText:Text;
 		private var spawner:RefugeeSpawner;
 		private var harpoon:Harpoon;
+		private var healthUI:Entity;
+		private var targeter:RefugeeTargeter;
 		
 		public function Game()
 		{
-			castle = new Castle();
-			castle.setBase(0, FP.height - 100);
-			castle.layer = 0;
-			add(castle);
+			targeter = new RefugeeTargeter();
 			
-			renegades = new Array();
-			var ren1:Escaper = new Escaper();
-			ren1.x = castle.right - ren1.width;
-			ren1.y = castle.bottom - ren1.height;
-			ren1.addEventListener(Escaper.EXIT_SCREEN_EVENT, onPeasantExit);
-			add(ren1);
-			renegades.push(ren1);
-			
-			spawner = new RefugeeSpawner(castle.right - ren1.width, castle.bottom - ren1.height);
-			spawner.addRenegade = addRenegade;
-			add(spawner);
-			
-			Escaper.changeHealth = changeHealth;
-			
-			health = 100;
-			healthUI = new Text(health.toString());
-			healthUI.x = FP.width - healthUI.textWidth;
-			healthUI.y = 0;
-			addGraphic(healthUI);
-			
-			harpoon = new Harpoon();
-			harpoon.x = castle.right - harpoon.width - 21; // account for flag's width
-			harpoon.y = castle.bottom - harpoon.height;
-			harpoon.layer = 1;
-			add(harpoon);
-			
-			harpoon.setStartX(harpoon.x);
-			harpoon.startY = harpoon.y;
+			placeCastle();
+			addSpawner();
+			setHealthToDefault();
+			addHealthUI();
+			addHarpoon();
 		}
 		
 		override public function render():void 
 		{
-			healthUI.text = health.toString();
-			healthUI.x = FP.width - healthUI.textWidth;
+			healthText.text = health.toString();
+			healthText.x = FP.width - healthText.textWidth;
 			
 			super.render();
 		}
@@ -75,14 +52,55 @@ package
 		{
 			var newGuy:Escaper = new Escaper(x, y);
 			add(newGuy);
-			renegades.push(newGuy);
 			newGuy.addEventListener(Escaper.EXIT_SCREEN_EVENT, onPeasantExit);
-			return renegades[0];
+			newGuy.addEventListener(Escaper.EXIT_SCREEN_EVENT, targeter.onRefugeeExitScreen);
+			newGuy.addEventListener(Escaper.EXIT_HARPOON_RANGE_EVENT, targeter.onRefugeeExitHarpoonRange);
+			return newGuy;
 		}
 		
 		private function onPeasantExit(e:Event):void 
 		{
 			changeHealth(5);
+		}
+		
+		private function placeCastle():void 
+		{
+			castle = new Castle();
+			castle.setBase(0, FP.height - 100);
+			castle.layer = Layers.CASTLE;
+			add(castle);
+		}
+		
+		private function addSpawner():void 
+		{
+			spawner = new RefugeeSpawner(castle.right - Escaper.getWidth(), castle.bottom - Escaper.getHeight());
+			spawner.addRenegade = addRenegade;
+			add(spawner); // Spawner has no image, but this forces it's update method to be called every frame.
+		}
+		
+		private function addHealthUI():void 
+		{
+			healthText = new Text(health.toString());
+			healthText.x = FP.width - healthText.textWidth;
+			healthText.y = 0;
+			healthUI = addGraphic(healthText);
+		}
+		
+		private function setHealthToDefault():void 
+		{
+			health = 100;
+		}
+		
+		private function addHarpoon():void 
+		{
+			harpoon = new Harpoon();
+			harpoon.x = castle.right - harpoon.width - 21; // account for flag's width
+			harpoon.y = castle.bottom - harpoon.height;
+			harpoon.layer = Layers.BEHIND_CASTLE;
+			add(harpoon);
+			
+			harpoon.setStartX(harpoon.x);
+			harpoon.startY = harpoon.y;
 		}
 	}
 

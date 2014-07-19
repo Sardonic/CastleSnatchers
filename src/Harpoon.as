@@ -98,7 +98,7 @@ package
 				for each (var r:Escaper in skeweredRenegades)
 				{
 					r.skewer();
-					r.layer = 1;
+					r.layer = Layers.BEHIND_CASTLE;
 				}
 				this.world.getInstance("castle").open();
 			}
@@ -136,7 +136,7 @@ package
 				for each (var r2:Escaper in skeweredRenegades)
 				{
 					r2.x = startX;
-					r2.layer = 1;
+					r2.layer = Layers.BEHIND_CASTLE;
 				}
 				state = INACTIVE;
 				this.world.getInstance("castle").close();
@@ -149,6 +149,11 @@ package
 			{
 				state = EXTENDING;
 			}
+		}
+		
+		public function getMaxXRange():int
+		{
+			return maxDist + this.width;
 		}
 	}
 

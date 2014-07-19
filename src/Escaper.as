@@ -28,19 +28,20 @@ package
 		private const IMPALED:Class;
 		
 		public static const EXIT_SCREEN_EVENT:String = "Escaper Exited Screen";
+		public static const EXIT_HARPOON_RANGE_EVENT:String = "Escaper Left Harpoon Range";
 		
 		public var speed:Number;
 		public var runAnim:Spritemap;
 		public var impaleAnim:Spritemap;
 		public var running:Boolean;
 		public var skewered:Boolean;
-		public var eventDispatcher:EventDispatcher;
-		public static var changeHealth:Function;
+		private var eventDispatcher:EventDispatcher;
+		private var outOfHarpoonRange:Boolean;
 		
 		public function Escaper(x:Number=0, y:Number=0, graphic:Graphic=null, mask:Mask=null) 
 		{
-			runAnim = new Spritemap(RUNNING, 64, 101);
-			impaleAnim = new Spritemap(IMPALED, 64, 101);
+			runAnim = new Spritemap(RUNNING, getWidth(), getHeight());
+			impaleAnim = new Spritemap(IMPALED, getWidth(), getHeight());
 			eventDispatcher = new EventDispatcher(this);
 			
 			runAnim.add("run", [0, 1], 12, true);
@@ -56,6 +57,8 @@ package
 			this.type = "Renegade";
 			
 			this.setHitbox(runAnim.width, runAnim.height);
+			
+			outOfHarpoonRange = false;
 			
 			super(x, y, runAnim, mask);
 			runAnim.play("run");
@@ -77,17 +80,31 @@ package
 		{
 			super.update();
 			
+			
 			if (running)
 			{
 				x += speed * FP.elapsed;
-			
 				if (x >= FP.width)
 				{
-					//changeHealth(5);
 					eventDispatcher.dispatchEvent(new Event(EXIT_SCREEN_EVENT));
 					running = false;
+					this.world.remove(this);
+				}
+				else
+				{
+					if (!outOfHarpoonRange)
+					{
+						var harpoon:Harpoon = this.world.getInstance("harpoon") as Harpoon;
+						
+						if (harpoon && harpoon.getMaxXRange() < this.x)
+						{
+							eventDispatcher.dispatchEvent(new Event(EXIT_HARPOON_RANGE_EVENT));
+							outOfHarpoonRange = true;
+						}
+					}
 				}
 			}
+			
 		}
 		
 		/* INTERFACE flash.events.IEventDispatcher */
@@ -117,7 +134,15 @@ package
 			return eventDispatcher.willTrigger(type);
 		}
 		
+		public static function getHeight():uint
+		{
+			return 101;
+		}
 		
+		public static function getWidth():uint
+		{
+			return 64;
+		}
 	}
 
 }

@@ -1,7 +1,9 @@
 package 
 {
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import net.flashpunk.debug.Console;
 	import net.flashpunk.Engine;
 	import net.flashpunk.FP;
 	
@@ -9,17 +11,15 @@ package
 	 * ...
 	 * @author Scott Barrett
 	 */
-	public class Main extends Engine 
+	public class Main extends Sprite
 	{
+		private var preloader:Preloader
 		
 		public function Main():void 
 		{
-			super(1024, 576, 60, false);
-		}
-		
-		override public function init():void 
-		{
-			FP.world = new Game();
+			preloader = new Preloader();
+			addChild(preloader);
+			preloader.init();
 		}
 		
 	}
