@@ -29,6 +29,7 @@ package
 		
 		public static const EXIT_SCREEN_EVENT:String = "Escaper Exited Screen";
 		public static const EXIT_HARPOON_RANGE_EVENT:String = "Escaper Left Harpoon Range";
+		public static const DYING_EVENT:String = "Escaper Dying";
 		
 		public var speed:Number;
 		public var runAnim:Spritemap;
@@ -88,6 +89,7 @@ package
 				{
 					eventDispatcher.dispatchEvent(new Event(EXIT_SCREEN_EVENT));
 					running = false;
+					eventDispatcher.dispatchEvent(new Event(DYING_EVENT));
 					this.world.remove(this);
 				}
 				else
@@ -132,6 +134,12 @@ package
 		public function willTrigger(type:String):Boolean 
 		{
 			return eventDispatcher.willTrigger(type);
+		}
+		
+		public function dye():void
+		{
+			dispatchEvent(new Event(DYING_EVENT));
+			this.world.remove(this);
 		}
 		
 		public static function getHeight():uint

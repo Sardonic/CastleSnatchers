@@ -55,6 +55,7 @@ package
 			newGuy.addEventListener(Escaper.EXIT_SCREEN_EVENT, onPeasantExit);
 			newGuy.addEventListener(Escaper.EXIT_SCREEN_EVENT, targeter.onRefugeeExitScreen);
 			newGuy.addEventListener(Escaper.EXIT_HARPOON_RANGE_EVENT, targeter.onRefugeeExitHarpoonRange);
+			newGuy.addEventListener(Escaper.DYING_EVENT, targeter.onRefugeeDeath);
 			return newGuy;
 		}
 		

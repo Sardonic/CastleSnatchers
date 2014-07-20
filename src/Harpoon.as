@@ -135,8 +135,7 @@ package
 				this.x = startX;
 				for each (var r2:Escaper in skeweredRenegades)
 				{
-					r2.x = startX;
-					r2.layer = Layers.BEHIND_CASTLE;
+					r2.dye();
 				}
 				state = INACTIVE;
 				this.world.getInstance("castle").close();
