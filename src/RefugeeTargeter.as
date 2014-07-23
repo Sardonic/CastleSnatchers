@@ -28,7 +28,6 @@ package
 			var newGuy:Escaper = game.getNewestEscaper();
 			newGuy.addEventListener(Escaper.EXIT_SCREEN_EVENT, onRefugeeExitScreen);
 			newGuy.addEventListener(Escaper.EXIT_HARPOON_RANGE_EVENT, onRefugeeExitHarpoonRange);
-			newGuy.addEventListener(Escaper.DYING_EVENT, onRefugeeDeath);
 		}
 		
 		public function shiftRefugee():Escaper
@@ -65,33 +64,9 @@ package
 			}
 		}
 		
-		public function onRefugeeDeath(e:Event):void
-		{
-			removeRefugee(e.currentTarget as Escaper);
-		}
-		
 		public function onRefugeeExitScreen(e:Event):void
 		{
-			/*
-			removeRefugee(e.currentTarget as Escaper);
-			var ref:Escaper = refugees[0];
-			
-			if (ref)
-			{
-				arrow.bindToEntity(ref);
-			}
-			else
-			{
-				arrow.world.remove(arrow);
-			}
-			*/
-			
 			shiftRefugee();
-		}
-		
-		public function onRefugeeAttacked(e:Event):void
-		{
-			removeRefugee(e.currentTarget as Escaper);
 		}
 		
 		public function removeRefugee(refugee:Escaper):void

@@ -65,21 +65,16 @@ package
 			health -= dec;
 		}
 		
-		public function addRenegade(x:Number, y:Number):Escaper
+		public function addRenegade(e:Escaper):Escaper
 		{
-			var newGuy:Escaper = new Escaper(x, y);
-			add(newGuy);
-			newestEscaper = newGuy;
+			add(e);
+			newestEscaper = e;
 			eventDispatcher.dispatchEvent(new Event(ADDED_ESCAPER));
 			
 			// Maybe this one deserves its own class?
-			newGuy.addEventListener(Escaper.EXIT_SCREEN_EVENT, onPeasantExit);
+			e.addEventListener(Escaper.EXIT_SCREEN_EVENT, onPeasantExit);
 			
-			// TODO Put all of the following into the appropriate classes
-			//newGuy.addEventListener(Escaper.EXIT_SCREEN_EVENT, targeter.onRefugeeExitScreen);
-			//newGuy.addEventListener(Escaper.EXIT_HARPOON_RANGE_EVENT, targeter.onRefugeeExitHarpoonRange);
-			//newGuy.addEventListener(Escaper.DYING_EVENT, targeter.onRefugeeDeath);
-			return newGuy;
+			return e;
 		}
 		
 		public function getNewestEscaper():Escaper
@@ -91,7 +86,13 @@ package
 		{
 			add(dog);
 			//eventDispatcher.dispatchEvent(Game.ADDED_DOG);
+			dog.addEventListener(Dog.RETRIEVED_ESCAPER, onDogSuccess);
 			return dog;
+		}
+		
+		private function onDogSuccess(e:Event):void 
+		{
+			health += 5;
 		}
 		
 		/* INTERFACE flash.events.IEventDispatcher */

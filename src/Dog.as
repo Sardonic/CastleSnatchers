@@ -11,7 +11,7 @@ package
 	 * ...
 	 * @author Scott Barrett
 	 */
-	public class Dog extends Entity 
+	public class Dog extends EventfulEntity 
 	{
 		[Embed(source = "../assets/img/Sick Paint ARt by LEAD DESIGNER/Sheets/Dog_Running_strip3.png")]
 		private static const RUNNING:Class;
@@ -26,12 +26,14 @@ package
 		private static const RUNNING_OFFSCREEN_STATE:int = 1
 		private static const DRAGGING_STATE:int = 2;
 		
+		static public const RETRIEVED_ESCAPER:String = "retrievedEscaper";
+		
 		public function Dog(target:Escaper, x:Number=0, y:Number=0) 
 		{
 			runAnim = new Spritemap(RUNNING, getWidth(), getHeight());
 			setHitbox(getWidth(), getHeight());
 			runAnim.add("run", [0, 1, 2], 12);
-			runAnim.play();
+			runAnim.play("run");
 			this.target = target;
 			target.addEventListener(Escaper.EXIT_SCREEN_EVENT, onTargetEscape);
 			state = CHASING_STATE;
@@ -99,6 +101,7 @@ package
 				this.world.remove(this);
 				
 				// fire some events, too
+				dispatchEvent(new Event(RETRIEVED_ESCAPER));
 			}
 		}
 		

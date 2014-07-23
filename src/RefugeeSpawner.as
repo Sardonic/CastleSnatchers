@@ -39,7 +39,7 @@ package
 			if (msUntilSpawn <= 0)
 			{
 				msUntilSpawn = FP.rand(2000) + 1000;
-				game.addRenegade(x, y);
+				game.addRenegade(new Escaper(x, y));
 			}
 		}
 	}
