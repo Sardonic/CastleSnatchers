@@ -1,5 +1,8 @@
 package  
 {
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 	import flash.utils.Timer;
 	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
@@ -9,12 +12,15 @@ package
 	 */
 	public class RefugeeSpawner extends Entity
 	{
-		public var msUntilSpawn:int;
+		private var msUntilSpawn:int;
 		public var addRenegade:Function;
+		private var eventDispatcher:EventDispatcher;
+		private var game:Game;
 		
-		public function RefugeeSpawner(x:Number, y:Number) 
+		public function RefugeeSpawner(game:Game, x:Number, y:Number) 
 		{
 			super(x, y);
+			this.game = game;
 			msUntilSpawn = FP.rand(2000) + 1000;
 			addRenegade = null;
 		}
@@ -33,7 +39,7 @@ package
 			if (msUntilSpawn <= 0)
 			{
 				msUntilSpawn = FP.rand(2000) + 1000;
-				addRenegade(x, y);
+				game.addRenegade(x, y);
 			}
 		}
 	}

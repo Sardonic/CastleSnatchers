@@ -14,20 +14,44 @@ package
 		private var refugees:Array;
 		private var arrow:TargetingArrow;
 		
-		public function RefugeeTargeter() 
+		public function RefugeeTargeter(game:Game) 
 		{
+			game.addEventListener(Game.ADDED_ESCAPER, onRefugeeAdded);
 			refugees = new Array();
 			arrow = new TargetingArrow();
 		}
 		
-		public function popRefugee():Escaper
+		private function onRefugeeAdded(e:Event):void 
 		{
-			return refugees.pop() as Escaper;
+			var game:Game = e.currentTarget as Game;
+			
+			var newGuy:Escaper = game.getNewestEscaper();
+			newGuy.addEventListener(Escaper.EXIT_SCREEN_EVENT, onRefugeeExitScreen);
+			newGuy.addEventListener(Escaper.EXIT_HARPOON_RANGE_EVENT, onRefugeeExitHarpoonRange);
+			newGuy.addEventListener(Escaper.DYING_EVENT, onRefugeeDeath);
 		}
 		
 		public function shiftRefugee():Escaper
 		{
-			return refugees.shift() as Escaper;
+			if (refugees.length > 0)
+			{
+				var e:Escaper = refugees.shift();
+				var next:Escaper = refugees[0];
+				
+				if (next)
+				{
+					arrow.bindToEntity(next);
+				}
+				else
+				{
+					arrow.world.remove(arrow);
+					arrow.unbind();
+				}
+				
+				return e as Escaper;
+			}
+			else
+				return null;
 		}
 		
 		public function onRefugeeExitHarpoonRange(e:Event):void
@@ -48,6 +72,7 @@ package
 		
 		public function onRefugeeExitScreen(e:Event):void
 		{
+			/*
 			removeRefugee(e.currentTarget as Escaper);
 			var ref:Escaper = refugees[0];
 			
@@ -55,6 +80,13 @@ package
 			{
 				arrow.bindToEntity(ref);
 			}
+			else
+			{
+				arrow.world.remove(arrow);
+			}
+			*/
+			
+			shiftRefugee();
 		}
 		
 		public function onRefugeeAttacked(e:Event):void
@@ -72,6 +104,11 @@ package
 				}
 				refugees.splice(refugees.indexOf(refugee), 1);
 			}
+		}
+		
+		public function getCurrentTarget():Entity
+		{
+			return arrow.getBoundEntity();
 		}
 	}
 

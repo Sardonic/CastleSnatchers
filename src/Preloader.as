@@ -16,7 +16,7 @@ package
 		
 	}
 	
-	public function init()
+	public function init():void
 	{
 		stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}

@@ -89,8 +89,7 @@ package
 				{
 					eventDispatcher.dispatchEvent(new Event(EXIT_SCREEN_EVENT));
 					running = false;
-					eventDispatcher.dispatchEvent(new Event(DYING_EVENT));
-					this.world.remove(this);
+					die();
 				}
 				else
 				{
@@ -136,9 +135,11 @@ package
 			return eventDispatcher.willTrigger(type);
 		}
 		
-		public function dye():void
+		public function die():void
 		{
 			dispatchEvent(new Event(DYING_EVENT));
+			active = false;
+			visible = false;
 			this.world.remove(this);
 		}
 		
