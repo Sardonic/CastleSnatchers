@@ -13,30 +13,42 @@ package
 	 */
 	public class DogSpawner extends Entity 
 	{
-		private var targeter:RefugeeTargeter
+		private var targeter:RefugeeTargeter;
+		private var numDogsAllowed:int;
+		private var numDogsAlive:int;
 		public var spawnDog:Function;
 		
-		public function DogSpawner(targeter:RefugeeTargeter, x:Number, y:Number) 
+		public function DogSpawner(targeter:RefugeeTargeter, dogSpawnCallback:Function, x:Number, y:Number) 
 		{
 			super(x, y);
 			
 			this.targeter = targeter;
-			spawnDog = null;
+			spawnDog = dogSpawnCallback;
+			numDogsAllowed = 1;
+			numDogsAlive = 0;
 		}
 		
 		override public function update():void 
 		{
 			super.update();
 			
-			if (Input.pressed(Key.C))
+			if (numDogsAlive < numDogsAllowed && Input.pressed(Key.C))
 			{
 				var escaper:Escaper = targeter.shiftRefugee();
 				
 				if (escaper)
 				{
-					spawnDog(new Dog(escaper, x, y));
+					var dog:Dog = new Dog(escaper, x, y);
+					spawnDog(dog);
+					dog.addEventListener(Dog.RETRIEVED_ESCAPER, onDogFinished);
+					numDogsAlive++;
 				}
 			}
+		}
+		
+		private function onDogFinished(e:Event):void 
+		{
+			numDogsAlive--;
 		}
 	}
 

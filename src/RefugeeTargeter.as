@@ -53,6 +53,16 @@ package
 				return null;
 		}
 		
+		public function peek():Escaper
+		{
+			if (refugees.length > 0)
+			{
+				return refugees[0];
+			}
+			
+			return null;
+		}
+		
 		public function onRefugeeExitHarpoonRange(e:Event):void
 		{
 			var newGuy:Escaper = e.currentTarget as Escaper;

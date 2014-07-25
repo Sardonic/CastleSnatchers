@@ -25,6 +25,7 @@ package
 			target = null;
 			this.layer = Layers.GUI;
 			this.setHitbox(arrowBlackImage.width, arrowBlackImage.height);
+			
 		}
 		
 		public function bindToEntity(e:Entity):void

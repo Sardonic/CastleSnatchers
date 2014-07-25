@@ -47,8 +47,7 @@ package
 		
 		private function addDogSpawner():void 
 		{
-			dogSpawner = new DogSpawner(targeter, -Dog.getWidth(), castle.bottom - Dog.getHeight());
-			dogSpawner.spawnDog = spawnDog;
+			dogSpawner = new DogSpawner(targeter, spawnDog, -Dog.getWidth(), castle.bottom - Dog.getHeight());
 			add(dogSpawner);
 		}
 		
@@ -137,15 +136,14 @@ package
 		private function placeCastle():void 
 		{
 			castle = new Castle();
-			castle.setBase(0, FP.height - 100);
+			EntityTools.setBase(castle, 0, FP.height - 100);
 			castle.layer = Layers.CASTLE;
 			add(castle);
 		}
 		
 		private function addSpawner():void 
 		{
-			spawner = new RefugeeSpawner(this, castle.right - Escaper.getWidth(), castle.bottom - Escaper.getHeight());
-			spawner.addRenegade = addRenegade;
+			spawner = new RefugeeSpawner(addRenegade, castle.right - Escaper.getWidth(), castle.bottom - Escaper.getHeight());
 			add(spawner); // Spawner has no image, but this forces it's update method to be called every frame.
 		}
 		

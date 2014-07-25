@@ -40,7 +40,7 @@ package
 			
 			chaseSpeed = 400;
 			dragSpeed = 150;
-			layer = Layers.FRONT_CASTLE;
+			layer = Layers.FRONT_REFUGEES;
 			
 			
 			super(x, y, runAnim);
@@ -100,7 +100,6 @@ package
 			{
 				this.world.remove(this);
 				
-				// fire some events, too
 				dispatchEvent(new Event(RETRIEVED_ESCAPER));
 			}
 		}

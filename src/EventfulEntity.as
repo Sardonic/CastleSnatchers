@@ -15,10 +15,19 @@ package
 	{
 		private var eventDispatcher:EventDispatcher;
 		
+		public static const DESTROYED_EVENT:String = "Entity Destroyed";
+		
 		public function EventfulEntity(x:Number=0, y:Number=0, graphic:Graphic=null, mask:Mask=null) 
 		{
 			super(x, y, graphic, mask);
 			eventDispatcher = new EventDispatcher(this);
+		}
+		
+		override public function removed():void 
+		{
+			dispatchEvent(new Event(DESTROYED_EVENT));
+			
+			super.removed();
 		}
 		
 		/* INTERFACE flash.events.IEventDispatcher */

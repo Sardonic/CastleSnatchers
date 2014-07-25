@@ -30,7 +30,6 @@ package
 		public static const EXIT_SCREEN_EVENT:String = "Escaper Exited Screen";
 		public static const EXIT_HARPOON_RANGE_EVENT:String = "Escaper Left Harpoon Range";
 		public static const DYING_EVENT:String = "Escaper Dying";
-		public static const DESTROYED_EVENT:String = "Escaper Destroyed";
 		
 		public var speed:Number;
 		public var runAnim:Spritemap;
@@ -50,6 +49,8 @@ package
 			runAnim.play("run");
 			impaleAnim.play("impaled");
 			
+			layer = Layers.FRONT_CASTLE;
+			
 			speed = 100;
 			running = true;
 			skewered = false;
@@ -61,7 +62,6 @@ package
 			outOfHarpoonRange = false;
 			
 			super(x, y, runAnim, mask);
-			runAnim.play("run");
 		}
 		
 		public function setBase(x:Number, y:Number):void
@@ -113,11 +113,6 @@ package
 			active = false;
 			visible = false;
 			this.world.remove(this);
-		}
-		
-		override public function removed():void
-		{
-			dispatchEvent(new Event(DESTROYED_EVENT));
 		}
 		
 		public static function getHeight():uint

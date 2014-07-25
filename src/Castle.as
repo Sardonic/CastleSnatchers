@@ -28,12 +28,6 @@ package
 			name = "castle";
 		}
 		
-		public function setBase(x:Number, y:Number):void
-		{
-			this.x = x;
-			this.y = (y - castleSheet.height);
-		}
-		
 		public function open():void
 		{
 			castleSheet.play("open");

@@ -15,19 +15,12 @@ package
 		private var msUntilSpawn:int;
 		public var addRenegade:Function;
 		private var eventDispatcher:EventDispatcher;
-		private var game:Game;
 		
-		public function RefugeeSpawner(game:Game, x:Number, y:Number) 
+		public function RefugeeSpawner(renegadeCallback:Function, x:Number, y:Number) 
 		{
 			super(x, y);
-			this.game = game;
 			msUntilSpawn = FP.rand(2000) + 1000;
-			addRenegade = null;
-		}
-		
-		public function makeRefugee():Escaper
-		{
-			return new Escaper(x, y);
+			addRenegade = renegadeCallback;
 		}
 		
 		override public function update():void 
@@ -39,7 +32,7 @@ package
 			if (msUntilSpawn <= 0)
 			{
 				msUntilSpawn = FP.rand(2000) + 1000;
-				game.addRenegade(new Escaper(x, y));
+				addRenegade(new Escaper(x, y));
 			}
 		}
 	}
